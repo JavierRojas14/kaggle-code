@@ -36,7 +36,7 @@ def entrenar_ensamble_de_modelos_gridcv(
         model = model_info["modelo"]
         param_grid = model_info["param_grid"]
 
-        grid_search = GridSearchCV(model, param_grid, cv=5, n_jobs=-1)
+        grid_search = GridSearchCV(model, param_grid, cv=5)
         grid_search.fit(X_train, y_train)
         model_info["modelo"] = grid_search
 
