@@ -43,6 +43,35 @@ def entrenar_ensamble_de_modelos_gridcv(
         obtener_desempeno_modelo_en_grilla(grid_search, X_test, y_test)
 
 
+def obtener_desempeno_modelo_en_grilla(modelo_grilla, X_test, y_test):
+    """
+    Muestra el desempeño de un modelo entrenado con GridSearchCV en un conjunto de prueba.
+
+    :param modelo_grilla: Modelo entrenado con GridSearchCV.
+    :type modelo_grilla: GridSearchCV object
+    :param X_test: Variables independientes del conjunto de prueba.
+    :type X_test: array-like
+    :param y_test: Variable dependiente del conjunto de prueba
+    :type y_test: array-like
+    :returns: pandas DataFrame
+    """
+    print("--------------Resultados Conjunto de Entrenamiento-----------------")
+    print("Los resultados en la busqueda de hiperparametros son:")
+    resultados_grilla = analizar_resultados_grid_cv(modelo_grilla.cv_results_)
+    plt.show()
+    print(f"Los mejores parametros fueron: {modelo_grilla.best_params_}")
+    print(f"El mejor desempeno fue: {modelo_grilla.best_score_}")
+
+    print("\n\n--------------Resultados Conjunto de Validacion-----------------")
+    yhat = modelo_grilla.predict(X_test)
+    print("Los resultados en el conjunto de validacion son:")
+    print(classification_report(y_test, yhat))
+
+    print("---------------------------------------------------------------------")
+
+    return resultados_grilla
+
+
 def resumir_resultados_grid_cv(diccionario_resultados):
     """
     Toma un diccionario de resultados de GridSearchCV y genera un DataFrame resumido con los
@@ -85,32 +114,3 @@ def analizar_resultados_grid_cv(diccionario_resultados):
     graficar_resultados_grid_cv(df_resultados)
 
     return df_resultados
-
-
-def obtener_desempeno_modelo_en_grilla(modelo_grilla, X_test, y_test):
-    """
-    Muestra el desempeño de un modelo entrenado con GridSearchCV en un conjunto de prueba.
-
-    :param modelo_grilla: Modelo entrenado con GridSearchCV.
-    :type modelo_grilla: GridSearchCV object
-    :param X_test: Variables independientes del conjunto de prueba.
-    :type X_test: array-like
-    :param y_test: Variable dependiente del conjunto de prueba
-    :type y_test: array-like
-    :returns: pandas DataFrame
-    """
-    print("--------------Resultados Conjunto de Entrenamiento-----------------")
-    print("Los resultados en la busqueda de hiperparametros son:")
-    resultados_grilla = analizar_resultados_grid_cv(modelo_grilla.cv_results_)
-    plt.show()
-    print(f"Los mejores parametros fueron: {modelo_grilla.best_params_}")
-    print(f"El mejor desempeno fue: {modelo_grilla.best_score_}")
-
-    print("\n\n--------------Resultados Conjunto de Validacion-----------------")
-    yhat = modelo_grilla.predict(X_test)
-    print("Los resultados en el conjunto de validacion son:")
-    print(classification_report(y_test, yhat))
-
-    print("---------------------------------------------------------------------")
-
-    return resultados_grilla
